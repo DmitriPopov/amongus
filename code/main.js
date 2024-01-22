@@ -3,7 +3,29 @@ import big from "./big";
 import patrol from "./patrol";
 import loadAssets from "./assets";
 
-kaboom({ background: [72, 0, 255] });
+const canvas = document.getElementById('app')
+kaboom({ canvas, background: [72, 0, 255] });
+
+const touchEndActions = []
+canvas.addEventListener('touchend', (e) => {
+  [...e.changedTouches].forEach((t) => {
+    touchEndActions.forEach((action) => {
+      action(t.identifier, vec2(t.clientX, t.clientY).scale(1 / canvas.scale))
+    })
+  }
+  )
+})
+
+function onTouchEnd(action){
+  touchEndActions.push(action)
+  return () => {
+    const idx = touchEndActions.findIndex(a => a === action)
+    if (idx >= 0) {
+      touchEndActions.splice(idx, 1)
+    }
+  }
+}
+
 loadAssets();
 
 // define some constants
@@ -300,6 +322,9 @@ scene(
         moveLeft();
       } else if (keyDown.right) {
         moveRight();
+      }
+      if ((!keyDown.left)&&(!keyDown.right)){
+        player.play('stand')
       }
     });
 
