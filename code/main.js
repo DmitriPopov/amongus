@@ -2,6 +2,7 @@ import kaboom from "kaboom";
 import big from "./big";
 import patrol from "./patrol";
 import loadAssets from "./assets";
+import JSConfetti from 'js-confetti'
 
 const canvas = document.getElementById('app')
 kaboom({ canvas, background: [72, 0, 255] });
@@ -57,10 +58,13 @@ const LEVELS = [
     "     H ^ > <   #####   $   @",
     "#############################",
   ],
-  ["   =>    #   #   ^      $ @", "############################"],
+  [
+    "   =>    #   #   ^      $ @", 
+    "############################"
+  ],
   [
     "      $ $  ^              ",
-    "  ^   =======     ^        ",
+    "  ^   =======       ^       ",
     "  =     $$          =   $$ @",
     "=============================",
   ],
@@ -142,6 +146,8 @@ const levelConf = {
     "portal",
   ],
 };
+
+const jsConfetti = new JSConfetti()
 
 scene(
   "game",
@@ -442,6 +448,7 @@ scene("lose", (levelId, coins) => {
   ]);
 
   onKeyPress(() => go("game"));
+  onTouchEnd(() => go("game"));
 });
 
 scene("win", () => {
@@ -455,8 +462,11 @@ scene("win", () => {
     // Keep the background position fixed even when the camera moves
     fixed(),
   ]);
-
+  jsConfetti.addConfetti({
+    emojis: ['⭐']
+  })  
   onKeyPress(() => go("game"));
+  onTouchEnd(() => go("game"));
 });
 
 const music = play("bgmusic", { loop: true });
