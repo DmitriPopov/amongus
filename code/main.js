@@ -59,7 +59,7 @@ const LEVELS = [
     "#############################",
   ],
   [
-    "   =>    #   #   ^      $ @", 
+    "   =>    #   #   ^      $ @",
     "############################"
   ],
   [
@@ -254,6 +254,8 @@ scene(
 
     // if player onCollide with any obj with "danger" tag, lose
     player.onCollide("danger", () => {
+      if (isDead) return;
+
       isDead = true;
       play("hit");
       // player.stop
@@ -285,6 +287,7 @@ scene(
     });
 
     player.onCollide("enemy", (e, col) => {
+      if (isDead) return;
       // if it's not from the top, die
       if (!col.isBottom()) {
         isDead = true;
@@ -464,7 +467,7 @@ scene("win", () => {
   ]);
   jsConfetti.addConfetti({
     emojis: ['⭐']
-  })  
+  })
   onKeyPress(() => go("game"));
   onTouchEnd(() => go("game"));
 });
