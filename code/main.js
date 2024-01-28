@@ -34,7 +34,7 @@ const JUMP_FORCE = 1100;
 const MOVE_SPEED = 390;
 const FALL_DEATH = 2400;
 const LIVES_COUNT = 3;
-const BULLET_SPEED = 400;
+const BULLET_SPEED = 600;
 
 const directions = {
   LEFT: "left",
