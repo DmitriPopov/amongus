@@ -53,7 +53,7 @@ const LEVELS = [
     "#                  #",
     "#     $     $      #",
     "#     #     #      #",
-    "#  $> #^ $  #<$  ?@#",
+    "#  $> #^ $  #<$ B?@#",
     "#####################",
   ],
   [
@@ -65,7 +65,7 @@ const LEVELS = [
     "#############################",
   ],
   [
-    "   =>    #   #   ^      $ @",
+    "   =>    # B #   ^      $ @",
     "############################"
   ],
   [
@@ -75,17 +75,17 @@ const LEVELS = [
     "=============================",
   ],
   [
-    "                      # ^> $$       @             ",
-    "                     ================               ",
-    "            ",
-    "   #<  ^ $  ^ $  ^ $   ",
+    "                      # ^> $$       @",
+    "                     ================ ",
+    "                           ",
+    "   #<  ^ $  ^ $  ^ $       ",
     "===========================",
   ],
   [
     "               $$     >",
     "              ==========                         ",
     "                                       ",
-    "       ^     #  $$    ^      $  $      @   ",
+    "       ^     #  $$    ^  B    $  $      @   ",
     "==========================================",
   ],
   [
@@ -94,23 +94,23 @@ const LEVELS = [
     "            ^==                                     ",
     "           ==                                       ",
     "         ==                                     ",
-    "      $      $   ^ $   ^ $  ^ >     $$$        @",
+    "      $  B   $   ^ $   ^ $  ^ >     $$$        @",
     "================================================ ",
   ],
   [
     "                                               ",
-    "        #      ^ $$   >    ^     $$   <      @ ",
+    "        #      ^ $$   >    ^ B   $$   <      @ ",
     "==============================================   ",
   ],
   [
     "                                               ",
-    "      ^ $$ #        ^>    $$  <     ^  $$     @       ",
+    "      ^ $$ # ?       ^>    $$  <  B  ^  $$     @       ",
     "==============  ================================   ",
   ],
   [
     "      #                      ^                   ",
     "      =                    ===                   ",
-    "    =     ^   $$   <<    >        ^  $   ^  $<<< @  ",
+    "    = ??    ^   $$   <<    > BBB  ^  $   ^  $<<< @  ",
     "==================================================  ",
   ],
 ];
@@ -143,6 +143,14 @@ const levelConf = {
     body(),
     patrol(),
     "enemy",
+  ],
+  "B": () => [
+    sprite("lightbulb"),
+    area(),
+    origin("bot"),
+    body(),
+    patrol(),
+    "superenemy",
   ],
   "@": () => [
     sprite("portal"),
@@ -299,6 +307,17 @@ scene(
       wait(2, () => goWithLevel(levelId, coins, --lives, knives));
     });
 
+    player.onCollide("superenemy", () => {
+      if (isDead) return;
+
+      isDead = true;
+      play("hit");
+      // player.stop
+      player.play("dead");
+      // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
+      wait(2, () => goWithLevel(levelId, coins, --lives, knives));
+    });
+
     player.onCollide("portal", () => {
       play("portal");
       if (levelId + 1 < LEVELS.length) {
@@ -315,7 +334,7 @@ scene(
 
     player.onGround((l) => {
       if (l.is("enemy")) {
-        player.jump(JUMP_FORCE * 1.5);
+        player.jump(JUMP_FORCE * 1.2);
         destroy(l);
         addKaboom(player.pos);
         play("powerup");
@@ -507,6 +526,12 @@ scene(
 
 
     onCollide("bullet", "enemy", (bullet, enemy) => {
+      addKaboom(enemy.pos)
+      destroy(bullet);
+      destroy(enemy);
+    });
+
+    onCollide("bullet", "superenemy", (bullet, enemy) => {
       addKaboom(enemy.pos)
       destroy(bullet);
       destroy(enemy);

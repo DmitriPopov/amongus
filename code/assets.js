@@ -15,6 +15,7 @@ export default function loadAssets() {
   loadSprite("right", "sprites/right.png");
   loadSprite("jump", "sprites/jump.png");
   loadSprite("fire", "sprites/fire.png");
+  loadSprite("lightbulb", "sprites/evil_lightbulb.png");
   // loadSprite("amongus", "sprites/amongus64.png");
   // loadSprite("amongus_sprite", "sprites/amongus_sprite.png");
   loadSpriteAtlas("sprites/amongus_sprite2.png", {
