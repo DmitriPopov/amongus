@@ -34,6 +34,12 @@ const JUMP_FORCE = 1100;
 const MOVE_SPEED = 390;
 const FALL_DEATH = 2400;
 const LIVES_COUNT = 3;
+const BULLET_SPEED = 400;
+
+const directions = {
+  LEFT: "left",
+  RIGHT: "right"
+}
 
 const LEVELS = [
   [
@@ -47,7 +53,7 @@ const LEVELS = [
     "#                  #",
     "#     $     $      #",
     "#     #     #      #",
-    "#  $> #^ $  #<$   @#",
+    "#  $> #^ $  #<$  ?@#",
     "#####################",
   ],
   [
@@ -145,14 +151,24 @@ const levelConf = {
     pos(0, -12),
     "portal",
   ],
+  "?": () => [
+    sprite("chest"),
+    area(),
+    origin("bot"),
+    pos(0, -12),
+    "chest",
+  ],
+
 };
 
 const jsConfetti = new JSConfetti()
 
 scene(
   "game",
-  ({ levelId, coins, lives } = { levelId: 0, coins: 0, lives: 3 }) => {
+  ({ levelId, coins, lives, knives } = { levelId: 0, coins: 0, lives: 3, knives: 10 }) => {
     gravity(3200);
+
+    let current_direction = directions.RIGHT;
 
     // add level to scene
     const level = addLevel(LEVELS[levelId ?? 0], levelConf);
@@ -196,22 +212,37 @@ scene(
       area(),
     ]);
 
+    const fireButton = add([
+      sprite("fire"),
+      pos(width() - 250, height() - 100),
+      opacity(0.5),
+      fixed(),
+      area(),
+    ]);
+
     const keyDown = {
       left: false,
       right: false,
       jump: false,
+      fire: false,
     };
 
     onTouchStart((id, pos) => {
       if (leftButton.hasPoint(pos)) {
         keyDown.left = true;
         leftButton.opacity = 1;
-      } else if (rightButton.hasPoint(pos)) {
+      }
+      if (rightButton.hasPoint(pos)) {
         keyDown.right = true;
         rightButton.opacity = 1;
-      } else if (jumpButton.hasPoint(pos)) {
-        jump();
+      }
+      if (jumpButton.hasPoint(pos)) {
+        jump()
         jumpButton.opacity = 1;
+      }
+      if (fireButton.hasPoint(pos)) {
+        spawnBullet(player.pos)
+        fireButton.opacity = 1;
       }
     });
 
@@ -227,6 +258,10 @@ scene(
       if (!jumpButton.hasPoint(pos)) {
         jumpButton.opacity = 0.5;
       }
+      if (!fireButton.hasPoint(pos)) {
+        keyDown.fire = false;
+        fireButton.opacity = 0.5;
+      }
     };
 
     onTouchMove(onTouchChanged);
@@ -234,12 +269,12 @@ scene(
 
     player.play("stand");
 
-    const goWithLevel = (levelId, coins, lives) => {
+    const goWithLevel = (levelId, coins, lives, knives) => {
       if (lives == 0) {
         go("lose");
       } else {
         isDead = false;
-        go("game", { levelId: levelId, coins: coins, lives: lives });
+        go("game", { levelId: levelId, coins: coins, lives: lives, knives: knives });
       }
     };
     // action() runs every frame
@@ -248,7 +283,7 @@ scene(
       camPos(player.pos);
       // check fall death
       if (player.pos.y >= FALL_DEATH) {
-        goWithLevel(levelId, coins, --lives);
+        goWithLevel(levelId, coins, --lives, knives);
       }
     });
 
@@ -261,7 +296,7 @@ scene(
       // player.stop
       player.play("dead");
       // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
-      wait(2, () => goWithLevel(levelId, coins, --lives));
+      wait(2, () => goWithLevel(levelId, coins, --lives, knives));
     });
 
     player.onCollide("portal", () => {
@@ -271,6 +306,7 @@ scene(
           levelId: levelId + 1,
           coins: coins,
           lives: lives,
+          knives: knives
         });
       } else {
         go("win");
@@ -295,7 +331,7 @@ scene(
         //player.stop;
         player.play("dead");
         // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
-        wait(2, () => goWithLevel(levelId, coins, --lives));
+        wait(2, () => goWithLevel(levelId, coins, --lives, knives));
         // goWithLevel(levelId, coins, --lives)
       }
     });
@@ -304,10 +340,23 @@ scene(
 
     // grow an apple if player's head bumps into an obj with "prize" tag
     player.onHeadbutt((obj) => {
-      if (obj.is("prize") && !hasApple) {
-        const apple = level.spawn("#", obj.gridPos.sub(0, 1));
-        apple.jump();
-        hasApple = true;
+      if (obj.is("prize")) {
+        const chest = add([
+          sprite("chest"),
+          pos(obj.pos.sub(0, 2)),
+          area(),
+          scale(1),
+          // makes it fall to gravity and jumpable
+          body(),
+          // the custom component we defined above
+          origin("bot"),
+          "chest"
+        ]);
+        console.log('hit')
+        // let chest = level.spawn("?", obj.gridPos.sub(0, 1));
+        chest.jump();
+        obj.destroy()
+        // hasApple = true;
         play("blip");
       }
     });
@@ -344,7 +393,7 @@ scene(
       });
       coinPitch += 100;
       coins += 1;
-      coinsLabel.text = getCoinsLabel(coins, lives);
+      coinsLabel.text = getCoinsLabel(coins, lives, knives);
     });
 
     player.onCollide("heart", (c) => {
@@ -354,15 +403,25 @@ scene(
       });
       coinPitch += 100;
       lives += 1;
-      coinsLabel.text = getCoinsLabel(coins, lives);
+      coinsLabel.text = getCoinsLabel(coins, lives, knives);
     });
 
-    const getCoinsLabel = (coins, lives) => {
-      return coins + "$ " + lives + "L";
+    player.onCollide("chest", (c) => {
+      destroy(c);
+      play("slash", {
+        detune: coinPitch,
+      });
+      coinPitch += 100;
+      knives += 10;
+      coinsLabel.text = getCoinsLabel(coins, lives, knives);
+    });
+
+    const getCoinsLabel = (coins, lives, knives) => {
+      return coins + "$ " + lives + "L " + knives + 'K';
     };
 
     const coinsLabel = add([
-      text(getCoinsLabel(coins, lives), { font: "amongusfont", size: 32 }),
+      text(getCoinsLabel(coins, lives, knives), { font: "amongusfont", size: 32 }),
       pos(24, 24),
       fixed(),
     ]);
@@ -383,6 +442,7 @@ scene(
       if (isDead) return;
 
       player.flipX(true);
+      current_direction = directions.LEFT;
       player.move(-MOVE_SPEED, 0);
       if (player.curAnim() !== "walk" && !isDead) {
         //   console.log(player.curAnim(), isDead)
@@ -413,6 +473,7 @@ scene(
       // console.log(isDead)
 
       player.flipX(false);
+      current_direction = directions.RIGHT;
       player.move(MOVE_SPEED, 0);
       if (player.curAnim() !== "walk" && !isDead) {
         //   console.log(player.curAnim(), isDead)
@@ -435,6 +496,73 @@ scene(
     onKeyPress("f", () => {
       fullscreen(!fullscreen());
     });
+
+    onKeyPress("control", () => {
+      spawnBullet(player.pos)
+    });
+
+    // onKeyRelease("control", () => {
+    //   keyDown.fire = false;
+    // });
+
+
+    onCollide("bullet", "enemy", (bullet, enemy) => {
+      addKaboom(enemy.pos)
+      destroy(bullet);
+      destroy(enemy);
+    });
+
+    onCollide("bullet", "brick", (bullet, _) => {
+      addKaboom(bullet.pos)
+      destroy(bullet);
+    });
+
+    onUpdate("bullet", (b) => {
+      b.move(b.bulletSpeed, 0);
+      // if ((b.pos.x < 0) || (b.pos.x > MAP_WIDTH)) {
+      //   destroy(b);
+      // }
+    });
+
+    function spawnBullet(bulletpos) {
+      // if (current_direction == directions.LEFT) {
+      //   bulletpos = bulletpos.sub(10, 0);
+      // } else if (current_direction == directions.RIGHT) {
+      //   bulletpos = bulletpos.add(10, 0);
+      // }
+      // bulletpos = bulletpos.sub(0, 64);
+      if (isDead) return;
+
+      if (knives <= 0){
+        return
+      }
+
+      let knife = add([
+        sprite("knife"),
+        pos(bulletpos),
+        origin("bot"),
+        // color(255, 255, 255),
+        area(),
+        cleanup(),
+        "bullet",
+        {
+          bulletSpeed: current_direction == directions.LEFT ? -1 * BULLET_SPEED : BULLET_SPEED
+        }
+      ]);
+
+      if (current_direction == directions.LEFT){
+        knife.flipX(true)
+      }
+
+      play("slash", {
+        volume: 0.2,
+        detune: rand(-1200, 1200),
+      });
+
+      knives-=1;
+      coinsLabel.text = getCoinsLabel(coins, lives, knives);
+    };
+
   }
 );
 

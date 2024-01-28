@@ -5,6 +5,8 @@ export default function loadAssets() {
   loadSprite("spike", "sprites/spike.png");
   loadSprite("grass", "sprites/grass.png");
   loadSprite("prize", "sprites/jumpy.png");
+  loadSprite("chest", "sprites/chest.png");
+  loadSprite("knife", "sprites/knife.png");
   // loadSprite("apple", "sprites/apple.png");
   loadSprite("heart", "sprites/heart.png");
   loadSprite("portal", "sprites/portal64.png");
@@ -12,6 +14,7 @@ export default function loadAssets() {
   loadSprite("left", "sprites/left.png");
   loadSprite("right", "sprites/right.png");
   loadSprite("jump", "sprites/jump.png");
+  loadSprite("fire", "sprites/fire.png");
   // loadSprite("amongus", "sprites/amongus64.png");
   // loadSprite("amongus_sprite", "sprites/amongus_sprite.png");
   loadSpriteAtlas("sprites/amongus_sprite2.png", {
@@ -38,5 +41,6 @@ export default function loadAssets() {
   loadSound("hit", "sounds/hit.mp3");
   loadSound("portal", "sounds/portal.mp3");
   loadSound("bgmusic", "sounds/bgmusic.mp3");
-  loadFont("amongusfont", "sprites/amongusfont.png", 64, 64, { chars: "$L0123456789" });
+  loadSound("slash", "sounds/slash.wav");
+  loadFont("amongusfont", "sprites/amongusfont.png", 64, 64, { chars: "$L0123456789K" });
 }
