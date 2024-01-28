@@ -35,6 +35,7 @@ const MOVE_SPEED = 390;
 const FALL_DEATH = 2400;
 const LIVES_COUNT = 3;
 const BULLET_SPEED = 600;
+const BUBBLESPEED = 300;
 
 const directions = {
   LEFT: "left",
@@ -43,7 +44,7 @@ const directions = {
 
 const LEVELS = [
   [
-    "                    ",
+    "      ?             ",
     "=================  =",
     "#################  #",
     "#                  #",
@@ -173,7 +174,7 @@ const jsConfetti = new JSConfetti()
 
 scene(
   "game",
-  ({ levelId, coins, lives, knives } = { levelId: 0, coins: 0, lives: 3, knives: 10 }) => {
+  ({ levelId, coins, lives, knives } = { levelId: 0, coins: 0, lives: 3, knives: 5 }) => {
     gravity(3200);
 
     let current_direction = directions.RIGHT;
@@ -371,10 +372,10 @@ scene(
           origin("bot"),
           "chest"
         ]);
-        console.log('hit')
+        //console.log('hit')
         // let chest = level.spawn("?", obj.gridPos.sub(0, 1));
         chest.jump();
-        obj.destroy()
+        destroy(obj)
         // hasApple = true;
         play("blip");
       }
@@ -433,6 +434,7 @@ scene(
       coinPitch += 100;
       knives += 5;
       coinsLabel.text = getCoinsLabel(coins, lives, knives);
+      spawnBubble(c.pos)
     });
 
     const getCoinsLabel = (coins, lives, knives) => {
@@ -548,6 +550,21 @@ scene(
       //   destroy(b);
       // }
     });
+
+    onUpdate("bubble", (b) => {
+      b.move(0, -BUBBLESPEED);
+      // if ((b.pos.x < 0) || (b.pos.x > MAP_WIDTH)) {
+      //   destroy(b);
+      // }
+    });
+
+    function spawnBubble(bubblePos) {
+      add([
+        text('5K', { font: "amongusfont", size: 32 }),
+        pos(bubblePos),
+        "bubble"
+      ]);
+    }
 
     function spawnBullet(bulletpos) {
       // if (current_direction == directions.LEFT) {
