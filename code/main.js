@@ -122,7 +122,7 @@ const levelConf = {
   height: 64,
   // define each object as a list of components
   "=": () => [sprite("grass"), area(), solid(), origin("bot")],
-  "#": () => [sprite("brick"), area(), solid(), origin("bot")],
+  "#": () => [sprite("brick"), area(), solid(), origin("bot"), "brick"],
   $: () => [sprite("coin"), area(), pos(0, -9), origin("bot"), "coin"],
   "%": () => [sprite("prize"), area(), solid(), origin("bot"), "prize"],
   "^": () => [sprite("spike"), area(), solid(), origin("bot"), "danger"],
