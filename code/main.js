@@ -619,7 +619,9 @@ scene("lose", (levelId, coins) => {
     // Keep the background position fixed even when the camera moves
     fixed(),
   ]);
-
+  jsConfetti.addConfetti({
+    emojis: ['💩']
+  })
   onKeyPress(() => go("game"));
   onTouchEnd(() => go("game"));
 });
