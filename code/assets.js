@@ -16,6 +16,7 @@ export default function loadAssets() {
   loadSprite("jump", "sprites/jump.png");
   loadSprite("fire", "sprites/fire.png");
   loadSprite("lightbulb", "sprites/evil_lightbulb.png");
+  loadSprite("levelbg", "sprites/levelbg.png");
   // loadSprite("amongus", "sprites/amongus64.png");
   // loadSprite("amongus_sprite", "sprites/amongus_sprite.png");
   loadSpriteAtlas("sprites/amongus_sprite2.png", {
@@ -45,5 +46,5 @@ export default function loadAssets() {
   loadSound("slash", "sounds/slash.wav");
   loadSound("victory", "sounds/victory.mp3");
   loadSound("defeat", "sounds/defeat.mp3");
-  loadFont("amongusfont", "sprites/amongusfont.png", 64, 64, { chars: "$L0123456789K" });
+  loadFont("amongusfont", "sprites/amongusfont.png", 64, 64, { chars: "$L0123456789K:" });
 }
