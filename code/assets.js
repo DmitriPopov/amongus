@@ -43,5 +43,7 @@ export default function loadAssets() {
   loadSound("portal", "sounds/portal.mp3");
   loadSound("bgmusic", "sounds/bgmusic.mp3");
   loadSound("slash", "sounds/slash.wav");
+  loadSound("victory", "sounds/victory.mp3");
+  loadSound("defeat", "sounds/defeat.mp3");
   loadFont("amongusfont", "sprites/amongusfont.png", 64, 64, { chars: "$L0123456789K" });
 }
