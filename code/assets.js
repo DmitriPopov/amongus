@@ -9,7 +9,46 @@ export default function loadAssets() {
   loadSprite("knife", "sprites/knife.png");
   // loadSprite("apple", "sprites/apple.png");
   loadSprite("heart", "sprites/heart.png");
-  loadSprite("portal", "sprites/portal64.png");
+  //loadSprite("portal", "sprites/portal64.png");
+  loadSpriteAtlas("sprites/portal64anim.png", {
+    portal: {
+      x: 0,
+      y: 0,
+      width: 256,
+      height: 64,
+      sliceX: 4,
+      sliceY: 1,
+      anims: {
+        whirl: { from: 0, to: 3, speed: 4, loop: true }
+      },
+    },
+  });
+  loadSpriteAtlas("sprites/torch.png", {
+    torch: {
+      x: 0,
+      y: 0,
+      width: 192,
+      height: 128,
+      sliceX: 3,
+      sliceY: 2,
+      anims: {
+        fire: { from: 0, to: 5, speed: 4, loop: true }
+      },
+    },
+  });
+  loadSpriteAtlas("sprites/introportalanim.png", {
+    introportal: {
+      x: 0,
+      y: 0,
+      width: 320,
+      height: 64,
+      sliceX: 5,
+      sliceY: 1,
+      anims: {
+        close: { from: 0, to: 4, speed: 4, loop: false }
+      },
+    },
+  });
   loadSprite("coin", "sprites/coin.png");
   loadSprite("left", "sprites/left.png");
   loadSprite("right", "sprites/right.png");
