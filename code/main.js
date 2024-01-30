@@ -343,6 +343,7 @@ scene(
     };
 
     onTouchMove(onTouchChanged);
+    touchEndActions.length = 0
     onTouchEnd(onTouchChanged);
 
     player.play("stand");
@@ -375,6 +376,7 @@ scene(
       // player.stop
       player.play("dead");
       // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
+      console.log('danger')
       wait(2, () => goWithLevel(levelId, coins, --lives, knives));
     });
 
@@ -385,6 +387,7 @@ scene(
       play("hit");
       // player.stop
       player.play("dead");
+      console.log('superenemy')
       // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
       wait(2, () => goWithLevel(levelId, coins, --lives, knives));
     });
@@ -422,6 +425,7 @@ scene(
         //player.stop;
         player.play("dead");
         // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
+        console.log('enemy')
         wait(2, () => goWithLevel(levelId, coins, --lives, knives));
         // goWithLevel(levelId, coins, --lives)
       }
