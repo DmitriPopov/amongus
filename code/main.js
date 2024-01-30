@@ -376,7 +376,7 @@ scene(
       // player.stop
       player.play("dead");
       // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
-      console.log('danger')
+      //console.log('danger')
       wait(2, () => goWithLevel(levelId, coins, --lives, knives));
     });
 
@@ -386,8 +386,9 @@ scene(
       isDead = true;
       play("hit");
       // player.stop
-      player.play("dead");
-      console.log('superenemy')
+      player.play("deadelectro");
+      shake();
+      //console.log('superenemy')
       // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
       wait(2, () => goWithLevel(levelId, coins, --lives, knives));
     });
@@ -425,7 +426,7 @@ scene(
         //player.stop;
         player.play("dead");
         // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
-        console.log('enemy')
+        //console.log('enemy')
         wait(2, () => goWithLevel(levelId, coins, --lives, knives));
         // goWithLevel(levelId, coins, --lives)
       }

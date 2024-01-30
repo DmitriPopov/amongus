@@ -23,14 +23,15 @@ export default function loadAssets() {
     amongus: {
       x: 0,
       y: 0,
-      width: 320,
+      width: 448,
       height: 64,
-      sliceX: 5,
+      sliceX: 7,
       sliceY: 1,
       anims: {
         stand: { from: 0, to: 0, speed: 4, loop: true },
         walk: { from: 1, to: 2, speed: 4, loop: true },
         dead: { from: 3, to: 4, speed: 1, loop: false },
+        deadelectro: { from: 6, to: 5, speed: 4, loop: true },
       },
     },
   });
