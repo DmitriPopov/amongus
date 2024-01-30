@@ -47,5 +47,6 @@ export default function loadAssets() {
   loadSound("slash", "sounds/slash.wav");
   loadSound("victory", "sounds/victory.mp3");
   loadSound("defeat", "sounds/defeat.mp3");
+  loadSound("electrodeath", "sounds/electrodeath.wav");
   loadFont("amongusfont", "sprites/amongusfont.png", 64, 64, { chars: "$L0123456789K:" });
 }

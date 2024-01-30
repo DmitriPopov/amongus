@@ -384,7 +384,7 @@ scene(
       if (isDead) return;
 
       isDead = true;
-      play("hit");
+      play("electrodeath");
       // player.stop
       player.play("deadelectro");
       shake();
