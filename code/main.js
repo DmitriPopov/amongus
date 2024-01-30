@@ -288,40 +288,55 @@ scene(
       right: false,
       jump: false,
       fire: false,
+      leftTouchId: -1,
+      rightTouchId: -1,
+      jumpTouchId: -1,
+      fireTouchId: -1,
+
     };
 
     onTouchStart((id, pos) => {
+      //console.log('start', pos)
       if (leftButton.hasPoint(pos)) {
         keyDown.left = true;
+        keyDown.leftTouchId = id
         leftButton.opacity = 1;
       }
       if (rightButton.hasPoint(pos)) {
         keyDown.right = true;
+        keyDown.rightTouchId = id
         rightButton.opacity = 1;
       }
       if (jumpButton.hasPoint(pos)) {
+        keyDown.jumpTouchId = id
         jump()
         jumpButton.opacity = 1;
       }
       if (fireButton.hasPoint(pos)) {
+        keyDown.fireTouchId = id
         spawnBullet(player.pos)
         fireButton.opacity = 1;
       }
     });
 
-    const onTouchChanged = (_, pos) => {
-      if (!leftButton.hasPoint(pos)) {
+    const onTouchChanged = (id, pos) => {
+      //console.log('changed', pos)
+      if ((keyDown.leftTouchId == id)&&(!leftButton.hasPoint(pos))) {
+        keyDown.leftTouchId = -1
         keyDown.left = false;
         leftButton.opacity = 0.5;
       }
-      if (!rightButton.hasPoint(pos)) {
+      if ((keyDown.rightTouchId == id)&&(!rightButton.hasPoint(pos))) {
+        keyDown.rightTouchId = -1
         keyDown.right = false;
         rightButton.opacity = 0.5;
       }
-      if (!jumpButton.hasPoint(pos)) {
+      if ((keyDown.jumpTouchId == id)&&(!jumpButton.hasPoint(pos))) {
+        keyDown.jumpTouchId = -1
         jumpButton.opacity = 0.5;
       }
-      if (!fireButton.hasPoint(pos)) {
+      if ((keyDown.fireTouchId == id)&&(!fireButton.hasPoint(pos))) {
+        keyDown.fireTouchId = -1
         keyDown.fire = false;
         fireButton.opacity = 0.5;
       }
