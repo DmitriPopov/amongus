@@ -56,21 +56,23 @@ export default function loadAssets() {
   loadSprite("fire", "sprites/fire.png");
   loadSprite("lightbulb", "sprites/evil_lightbulb.png");
   loadSprite("levelbg", "sprites/levelbg.png");
+  loadSprite("evilclown", "sprites/evilclown.png");
   // loadSprite("amongus", "sprites/amongus64.png");
   // loadSprite("amongus_sprite", "sprites/amongus_sprite.png");
   loadSpriteAtlas("sprites/amongus_sprite2.png", {
     amongus: {
       x: 0,
       y: 0,
-      width: 448,
+      width: 512,
       height: 64,
-      sliceX: 7,
+      sliceX: 8,
       sliceY: 1,
       anims: {
         stand: { from: 0, to: 0, speed: 4, loop: true },
         walk: { from: 1, to: 2, speed: 4, loop: true },
         dead: { from: 3, to: 4, speed: 1, loop: false },
         deadelectro: { from: 6, to: 5, speed: 4, loop: true },
+        deadknife: { from: 7, to: 7, speed: 4, loop: false },
       },
     },
   });

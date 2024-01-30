@@ -63,7 +63,7 @@ const LEVELS = [
     "#                            #",
     "#       F         #     F    #",
     "#                 ##         #",
-    "#!    H ^ > <   #####   $   @#",
+    "#!    H ^ > <  C#####   $   @#",
     "##############################",
   ],
   [
@@ -193,6 +193,14 @@ const levelConf = {
     body(),
     patrol(),
     "superenemy",
+  ],
+  "C": () => [
+    sprite("evilclown"),
+    area(),
+    origin("bot"),
+    body(),
+    patrol(),
+    "mirrorenemy",
   ],
   "@": () => [
     sprite("portal", {frame: 0}),
@@ -433,7 +441,7 @@ scene(
     });
 
     player.onGround((l) => {
-      if (l.is("enemy")) {
+      if ((l.is("enemy"))||(l.is("mirrorenemy"))) {
         player.jump(JUMP_FORCE * 1.2);
         destroy(l);
         addKaboom(player.pos);
@@ -454,6 +462,37 @@ scene(
         wait(2, () => goWithLevel(levelId, coins, --lives, knives));
         // goWithLevel(levelId, coins, --lives)
       }
+    });
+
+    player.onCollide("mirrorenemy", (e, col) => {
+      if (isDead) return;
+      // if it's not from the top, die
+      if (!col.isBottom()) {
+        isDead = true;
+        play("hit");
+        //player.stop;
+        player.play("dead");
+        // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
+        //console.log('enemy')
+        wait(2, () => goWithLevel(levelId, coins, --lives, knives));
+        // goWithLevel(levelId, coins, --lives)
+      }
+    });
+
+    player.onCollide("enemybullet", (e, col) => {
+      if (isDead) return;
+      // if it's not from the top, die
+
+        isDead = true;
+        play("hit");
+        //player.stop;
+        destroy(e)
+        player.play("deadknife");
+        // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
+        //console.log('enemy')
+        wait(2, () => goWithLevel(levelId, coins, --lives, knives));
+        // goWithLevel(levelId, coins, --lives)
+
     });
 
     let hasApple = false;
@@ -645,12 +684,30 @@ scene(
       destroy(enemy);
     });
 
+    onCollide("bullet", "mirrorenemy", (bullet, enemy) => {
+      spawnEnemyBullet(enemy.pos, bullet.bulletSpeed)
+      destroy(bullet)
+    });
+
     onCollide("bullet", "brick", (bullet, _) => {
       addKaboom(bullet.pos)
       destroy(bullet);
     });
 
+    onCollide("enemybullet", "brick", (bullet, _) => {
+      addKaboom(bullet.pos)
+      destroy(bullet);
+    });
+
+
     onUpdate("bullet", (b) => {
+      b.move(b.bulletSpeed, 0);
+      // if ((b.pos.x < 0) || (b.pos.x > MAP_WIDTH)) {
+      //   destroy(b);
+      // }
+    });
+
+    onUpdate("enemybullet", (b) => {
       b.move(b.bulletSpeed, 0);
       // if ((b.pos.x < 0) || (b.pos.x > MAP_WIDTH)) {
       //   destroy(b);
@@ -670,6 +727,25 @@ scene(
         pos(bubblePos),
         "bubble"
       ]);
+    }
+
+    function spawnEnemyBullet(bulletpos, bulletSpeed) {
+      let knife = add([
+        sprite("knife"),
+        pos(bulletpos),
+        origin("bot"),
+        // color(255, 255, 255),
+        area(),
+        cleanup(),
+        "enemybullet",
+        {
+          bulletSpeed: -1 * bulletSpeed
+        }
+      ]);
+
+      if (bulletSpeed > 0){
+        knife.flipX(true)
+      }
     }
 
     function spawnBullet(bulletpos) {
