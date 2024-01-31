@@ -488,6 +488,7 @@ scene(
         play("hit");
         //player.stop;
         destroy(e)
+        addKaboom(player.pos)
         player.play("deadknife");
         // setTimeout(()=>goWithLevel(levelId, coins, --lives), 1000)
         //console.log('enemy')
