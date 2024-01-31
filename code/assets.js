@@ -84,7 +84,7 @@ export default function loadAssets() {
   loadSound("blip", "sounds/blip.mp3");
   loadSound("hit", "sounds/hit.mp3");
   loadSound("portal", "sounds/portal.mp3");
-  loadSound("bgmusic", "sounds/bgmusic.mp3");
+  loadSound("bgmusic", "sounds/bgmusic.m4a");
   loadSound("slash", "sounds/slash.wav");
   loadSound("victory", "sounds/victory.mp3");
   loadSound("defeat", "sounds/defeat.mp3");
