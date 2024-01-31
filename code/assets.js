@@ -36,16 +36,16 @@ export default function loadAssets() {
       },
     },
   });
-  loadSpriteAtlas("sprites/introportalanim.png", {
+  loadSpriteAtlas("sprites/introportalanim2.png", {
     introportal: {
       x: 0,
       y: 0,
-      width: 320,
+      width: 1152,
       height: 64,
-      sliceX: 5,
+      sliceX: 9,
       sliceY: 1,
       anims: {
-        close: { from: 0, to: 4, speed: 4, loop: false }
+        close: { from: 0, to: 8, speed: 8, loop: false }
       },
     },
   });
@@ -63,16 +63,16 @@ export default function loadAssets() {
     amongus: {
       x: 0,
       y: 0,
-      width: 512,
+      width: 576,
       height: 64,
-      sliceX: 8,
+      sliceX: 9,
       sliceY: 1,
       anims: {
-        stand: { from: 0, to: 0, speed: 4, loop: true },
-        walk: { from: 1, to: 2, speed: 4, loop: true },
-        dead: { from: 3, to: 4, speed: 1, loop: false },
-        deadelectro: { from: 6, to: 5, speed: 4, loop: true },
-        deadknife: { from: 7, to: 7, speed: 4, loop: false },
+        stand: { from: 1, to: 1, speed: 4, loop: true },
+        walk: { from: 2, to: 3, speed: 4, loop: true },
+        dead: { from: 4, to: 5, speed: 1, loop: false },
+        deadelectro: { from: 7, to: 6, speed: 4, loop: true },
+        deadknife: { from: 8, to: 8, speed: 4, loop: false },
       },
     },
   });

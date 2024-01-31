@@ -213,6 +213,7 @@ const levelConf = {
     sprite("introportal", {frame: 0}),
     area(),
     origin("bot"),
+    pos(32, 0),
     "introportal",
   ],
   "F": () => [
@@ -252,6 +253,7 @@ scene(
     const levelH = levelMap.length - 1
 
     let isDead = false;
+    let isIntroOver = false
 
     const ui = add([
       sprite("levelbg"),
@@ -266,10 +268,11 @@ scene(
 
     const introportal = get('introportal')[0]
 
+    introportal.play('close')
     // define player object
     const player = add([
-      sprite("amongus"),
-      pos(introportal.pos.x + 64, introportal.pos.y),
+      sprite("amongus", {frame: 0}),
+      pos(introportal.pos.x + 32, introportal.pos.y),
       area(),
       scale(1),
       // makes it fall to gravity and jumpable
@@ -278,8 +281,6 @@ scene(
       big(),
       origin("bot"),
     ]);
-
-    introportal.play('close')
 
     get('torch').forEach((torch) => torch.play('fire'))
 
@@ -378,7 +379,7 @@ scene(
     touchEndActions.length = 0
     onTouchEnd(onTouchChanged);
 
-    player.play("stand");
+    wait(0.4, () => {player.play("stand"); isIntroOver = true });
 
     const goWithLevel = (levelId, coins, lives, knives) => {
       if (lives == 0) {
@@ -540,7 +541,7 @@ scene(
       } else if (keyDown.right) {
         moveRight();
       }
-      if ((!keyDown.left)&&(!keyDown.right)&&(!isDead)){
+      if ((!keyDown.left)&&(!keyDown.right)&&(!isDead)&&(isIntroOver)){
         player.play('stand')
       }
     });
